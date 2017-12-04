@@ -1,0 +1,19 @@
+#buttonClass  {
+    background: green;
+    color: white;
+    /* vertical-align: center; */
+    padding: 20px;  
+    font-size: 20px;
+
+}
+form{
+    float: right;
+}
+/* .gif {
+    float: left;
+    padding: 20px;
+}
+
+p{
+    float: left;
+} */

@@ -1,0 +1,130 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gifs</title>
+</head>
+
+<body>
+
+    <div id="gifsButtons">
+
+        <div id="gifsImages">
+
+        </div>
+    </div>
+    <div id="searchBox">
+        <form id="movie-form">
+            <label for="gif-input">Search for a GIF</label>
+            <input type="text" id="gif-input">
+            <br>
+            <input id="find-gif" type="submit" value="GIF Search">
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script type="text/javascript">
+        var topic = ["football", "cricket", "basketball", "Soccer", "tennis", "swimming"];
+        var userGif = [];
+
+        createButton();
+
+        function createButton(sport) {
+            $("#gifsButtons").empty();
+
+            for (i = 0; i < topic.length; i++) {
+                var gifsButtonDiv = $("<div>");
+                var gifButton = $("<button id = buttonClass>")
+                gifButton.attr("data-sport", topic[i]);
+                gifButton.text(topic[i]);
+                gifsButtonDiv.append(gifButton);
+                $("#gifsButtons").prepend(gifButton);
+
+            }
+        }
+        $("#find-gif").on("click", function () {
+            userGif = $("#gif-input").val().trim();
+            topic.push(userGif);
+            console.log(userGif);
+            createButton();
+
+        });
+        $("button").on("click", function () {
+
+
+            var sport = $(this).attr("data-sport");
+            var queryURL = "https://api.giphy.com/v1/gifs/search";
+            var apiKey = "h3ZfcokVkTszyvNg8AB93XpOtTMKzM7B"
+            $.ajax({
+                    url: queryURL,
+                    method: "GET",
+                    data: {
+                        q: sport,
+                        api_key: apiKey,
+                        limit: 10
+                    }
+                })
+                .done(function (response) {
+                    var results = response.data;
+
+                    console.log(results);
+
+                    $("#gifsImages").empty();
+
+                    for (var j = 0, len = results.length; j < len; j++) {
+
+                        var sportDiv = $("<div>");
+
+                        var pRating = $("<p>").text("Rating: " + results[j].rating);
+
+                        var state = $(this).attr("data-state");
+
+                        // var stillState = results[j].images.fixed_height_still.url;
+                        // var animatedState = results[j].images.fixed_height.url;
+
+                        // Creating and storing an image tag
+                        var sportImage = $("<img class = gif>");
+                        // Setting the src attribute of the image to a property pulled off the result item
+                        sportImage.attr("src", results[j].images.fixed_height_still.url);
+                        sportImage.attr("data-state", "stillState");
+                        sportImage.attr("still-state", results[j].images.fixed_height_still.url);
+                        sportImage.attr("animated-state", results[j].images.fixed_height.url);
+
+
+                        // sportImage.attr("data-gifID", results[j].id);
+
+
+
+                        // Appending the paragraph and image tag to the animalDiv
+                        sportDiv.append(pRating);
+                        sportDiv.append(sportImage);
+
+                        // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
+                        $("#gifsImages").append(sportDiv);
+                    }
+
+                    $(".gif").on("click", function () {
+
+                        var state = $(this).attr("data-state");
+                        // var idForGif = $(this).attr("data-gifID");
+
+                        if (state === "stillState") {
+                            $(this).attr("src", $(this).attr("animated-state"));
+                            $(this).attr("data-state", "animateState");
+
+                        } else {
+                            $(this).attr("src", $(this).attr("still-state"));
+                            $(this).attr("data-state", "stillState");
+
+                        }
+                    });
+
+                });
+        });
+    </script>
+</body>
+
+</html>
