@@ -2,12 +2,16 @@
     background: green;
     color: white;
     /* vertical-align: center; */
-    padding: 20px;  
-    font-size: 20px;
+    padding: 10px;
+    font-size: 10px;
 
 }
-form{
-    float: right;
+
+#gifsButtons{
+    width: 70%;
+}
+#searchBox{
+    float: left;
 }
 /* .gif {
     float: left;

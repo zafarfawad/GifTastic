@@ -7,66 +7,99 @@
 
 <body>
 
-    <div id="gifsButtons">
+<div id="gifsButtons"></div>
 
-        <div id="gifsImages">
+<div id="searchBox">
+    <form id="movie-form">
+        <label for="gif-input">Search for a GIF</label>
+        <input type="text" id="gif-input">
+        <br>
+        <input id="find-gif" type="submit" value="GIF Search">
+    </form>
+</div>
 
-        </div>
-    </div>
-    <div id="searchBox">
-        <form id="movie-form">
-            <label for="gif-input">Search for a GIF</label>
-            <input type="text" id="gif-input">
-            <br>
-            <input id="find-gif" type="submit" value="GIF Search">
-        </form>
-    </div>
+<div id="gifsImages"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <script type="text/javascript">
-        var topic = ["football", "cricket", "basketball", "Soccer", "tennis", "swimming"];
-        var userGif = [];
+<link rel="stylesheet" type="text/css" href="style.css">
 
-        createButton();
+<script type="text/javascript">
+    var topic = ["football", "baseball", "basketball", "Soccer", "tennis", "swimming"];
 
-        function createButton(sport) {
-            $("#gifsButtons").empty();
+    for (i = 0; i < topic.length; i++) {
+        createButton(topic[i]);
+    }
+    addGif();
 
-            for (i = 0; i < topic.length; i++) {
-                var gifsButtonDiv = $("<div>");
-                var gifButton = $("<button id = buttonClass>")
-                gifButton.attr("data-sport", topic[i]);
-                gifButton.text(topic[i]);
-                gifsButtonDiv.append(gifButton);
-                $("#gifsButtons").prepend(gifButton);
 
-            }
-        }
-        $("#find-gif").on("click", function () {
-            userGif = $("#gif-input").val().trim();
+    function addGif() {
+        $("#find-gif").on("click", function (event) {
+            event.preventDefault();
+
+            var userGif = $("#gif-input").val().trim();
             topic.push(userGif);
-            console.log(userGif);
-            createButton();
+            $("#gif-input").val("");
+            createButton(userGif);
 
         });
+    }
+
+    function createButton(topic) {
+//        $("#gifsButtons").empty();
+
+        var gifsButtonDiv = $("<div>");
+        var gifButton = $("<button id = buttonClass>")
+        gifButton.attr("data-sport", topic);
+        gifButton.text(topic);
+        gifsButtonDiv.append(gifButton);
+
+        $("#gifsButtons").append(gifButton);
+
+        clickGifButton();
+        assignClickEvents();
+    }
+
+
+    function assignClickEvents() {
+        $(".gif").on("click", function () {
+
+            var state = $(this).attr("data-state");
+            // var idForGif = $(this).attr("data-gifID");
+
+            if (state === "stillState") {
+                $(this).attr("src", $(this).attr("animated-state"));
+                $(this).attr("data-state", "animateState");
+
+            } else {
+                $(this).attr("src", $(this).attr("still-state"));
+                $(this).attr("data-state", "stillState");
+
+            }
+
+
+        });
+    }
+
+
+    function clickGifButton() {
         $("button").on("click", function () {
 
 
             var sport = $(this).attr("data-sport");
+
             var queryURL = "https://api.giphy.com/v1/gifs/search";
             var apiKey = "h3ZfcokVkTszyvNg8AB93XpOtTMKzM7B"
             $.ajax({
-                    url: queryURL,
-                    method: "GET",
-                    data: {
-                        q: sport,
-                        api_key: apiKey,
-                        limit: 10
-                    }
-                })
+                url: queryURL,
+                method: "GET",
+                data: {
+                    q: sport,
+                    api_key: apiKey,
+                    limit: 10
+                }
+            })
                 .done(function (response) {
                     var results = response.data;
 
@@ -82,10 +115,7 @@
 
                         var state = $(this).attr("data-state");
 
-                        // var stillState = results[j].images.fixed_height_still.url;
-                        // var animatedState = results[j].images.fixed_height.url;
 
-                        // Creating and storing an image tag
                         var sportImage = $("<img class = gif>");
                         // Setting the src attribute of the image to a property pulled off the result item
                         sportImage.attr("src", results[j].images.fixed_height_still.url);
@@ -93,38 +123,23 @@
                         sportImage.attr("still-state", results[j].images.fixed_height_still.url);
                         sportImage.attr("animated-state", results[j].images.fixed_height.url);
 
-
-                        // sportImage.attr("data-gifID", results[j].id);
-
-
-
                         // Appending the paragraph and image tag to the animalDiv
                         sportDiv.append(pRating);
                         sportDiv.append(sportImage);
 
-                        // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
+                        // appending the animalDiv to the HTML page in the "#gifs-appear-here" div
                         $("#gifsImages").append(sportDiv);
                     }
-
-                    $(".gif").on("click", function () {
-
-                        var state = $(this).attr("data-state");
-                        // var idForGif = $(this).attr("data-gifID");
-
-                        if (state === "stillState") {
-                            $(this).attr("src", $(this).attr("animated-state"));
-                            $(this).attr("data-state", "animateState");
-
-                        } else {
-                            $(this).attr("src", $(this).attr("still-state"));
-                            $(this).attr("data-state", "stillState");
-
-                        }
-                    });
+                    assignClickEvents();
 
                 });
+
+
         });
-    </script>
+    }
+
+    clickGifButton();
+</script>
 </body>
 
 </html>
