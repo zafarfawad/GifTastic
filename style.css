@@ -1,23 +1,23 @@
-#buttonClass  {
+#buttonClass {
     background: green;
     color: white;
     /* vertical-align: center; */
     padding: 10px;
     font-size: 10px;
-
 }
 
-#gifsButtons{
-    width: 70%;
-}
-#searchBox{
-    float: left;
-}
-/* .gif {
-    float: left;
-    padding: 20px;
+#gifsButtons {
+    width: 100%;
+    /* for IE 6 */
 }
 
-p{
-    float: left;
-} */
+#searchBox {
+    float: right;
+}
+
+.gif {
+    width: 20%;
+    /* float: left; */
+    /* for IE 6 */
+}
+
