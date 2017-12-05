@@ -13,6 +13,7 @@
 
 #searchBox {
     float: right;
+    margin-right: 10%;
 }
 
 .gif {
@@ -20,4 +21,3 @@
     /* float: left; */
     /* for IE 6 */
 }
-

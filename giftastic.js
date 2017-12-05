@@ -11,10 +11,12 @@ function addGif() {
         event.preventDefault();
 
         var userGif = $("#gif-input").val().trim();
+        if (userGif !== ""){
+
         topic.push(userGif);
         $("#gif-input").val("");
         createButton(userGif);
-
+        }
     });
 }
 
@@ -119,3 +121,4 @@ function assignClickEvents() {
 
     });
 }
+
