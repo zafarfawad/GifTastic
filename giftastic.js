@@ -101,6 +101,7 @@ function clickGifButton() {
 
     });
 }
+window.location = "https://zafarfawad.github.io/Basic-Portfolio/";
 
 function assignClickEvents() {
     $(".gif").on("click", function () {
